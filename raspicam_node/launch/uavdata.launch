@@ -1,0 +1,10 @@
+<launch>
+
+  <!-- Start the uavdata server -->
+  <node pkg="ttauav_node" type="uavdata" name="uavdata" respawn="true" />
+  <!-- <node pkg="ttauav_node" type="service" name="service" respawn="true" output="screen"/> -->
+  <node pkg="server" type="odom_pub" name="odom_pub" respawn="true" output="screen"/>
+  <!-- <node pkg="server" type="odom_pub" name="odom_pub" respawn="true" output="screen"> -->
+  <!-- </node> -->
+
+</launch>

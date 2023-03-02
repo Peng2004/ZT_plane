@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ttauav_node</name>
+  <version>0.5.0</version>
+  <description>Package to access the Raspberry Pi Camera from ROS.</description>
+
+  <maintainer email="send2arohan@gmail.com">Rohan Agrawal</maintainer>
+  <maintainer email="wayne@gramlich.net">Wayne Gramlich</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>compressed_image_transport</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>camera_info_manager</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>diagnostic_updater</depend>
+  <depend>libraspberrypi0</depend>
+  <build_depend>libraspberrypi-dev</build_depend>
+  <!-- <build_depend>server</build_depend> Add this line -->
+  <build_depend>message_generation</build_depend>
+  <!-- <build_export_depend>server</build_export_depend> Add this line -->
+  <exec_depend>message_runtime</exec_depend>
+  <!-- <exec_depend>server</exec_depend> Add this line -->
+
+  <export>
+  </export>
+</package>
