@@ -268,10 +268,6 @@ target_link_libraries(image_send
 #    ${catkin_LIBRARIES}
 # )
 
-add_executable(odom_pub src/odom_pub.cpp)
-target_link_libraries(odom_pub
-  ${catkin_LIBRARIES}
-)
 
 # add_executable(talker_msg src/msg_test.cpp)
 # target_link_libraries(talker_msg
@@ -283,6 +279,10 @@ target_link_libraries(odom_pub
 #   ${catkin_LIBRARIES}
 # )
 
+add_executable(odom_pub src/odom_pub.cpp)
+target_link_libraries(odom_pub
+  ${catkin_LIBRARIES}
+)
 
 include_directories(/mnt/project/openCV/opencv-3.2.0_install/include /mnt/project/openCV/opencv-3.2.0_install/include/opencv /mnt/project/openCV/opencv-3.2.0_install/include/opencv2)
 

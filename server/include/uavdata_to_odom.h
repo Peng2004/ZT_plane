@@ -133,7 +133,7 @@ uavOdom::uavOdom(ros::NodeHandle& nh):nhi(nh)
 {
     //参数初始化
   printf("uav_odom start\n");
-  uavsub = nhi.subscribe("/uavdata",150 ,&uavOdom::uavCallback,this);
+  uavsub = nhi.subscribe("/uavdata",30 ,&uavOdom::uavCallback,this);
   ros::Rate loop_rate(150);
 
   odompub = nhi.advertise<nav_msgs::Odometry>("uav_odom", 30);

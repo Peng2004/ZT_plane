@@ -46,6 +46,7 @@ ros::Subscriber control_msg_sub;
 ros::Subscriber pc_sub;
 ros::Publisher end_pub;
 ros::Publisher img_pub;
+ros::Publisher april_img_pub;
 ros::Publisher room_pub;
 
 
@@ -68,6 +69,8 @@ int main(int argc, char** argv) {
     
 
     img_pub = n.advertise<sensor_msgs::Image>("uav_img", 10);
+	april_img_pub = n.advertise<sensor_msgs::Image>("uav_april_img", 10);
+
 
 	ros::Rate loop_rate(10); // 每10秒循环一次
 
@@ -78,10 +81,22 @@ int main(int argc, char** argv) {
 	static int send_status = 0;
 
 	n.setParam("uav_img_status",0);
+	n.setParam("uav_img_service_status",0);
 
-	service.setImageCallback(nullptr, [&ts,&img_pub,n,&send_status,&delay_time,&send_num](void* handler, uint8_t* frmdata, int frmsize, int width, int height, int pixfmt) -> void {
+	service.setImageCallback(nullptr, [&ts,&img_pub,&april_img_pub,n,&send_status,&delay_time,&send_num](void* handler, uint8_t* frmdata, int frmsize, int width, int height, int pixfmt) -> void {
 
 		n.getParam("uav_img_status",send_status);
+		
+		static int image_num = 0;
+		if(send_status == 1){
+			image_num = 3;
+		}
+		else if(send_status == 2){
+			image_num = 1;
+		}
+		else {
+			image_num = 0;
+		}
 
 		if(send_status != 0){
 
@@ -92,16 +107,9 @@ int main(int argc, char** argv) {
 
 				if(t - ts > delay_time){
 					send_num ++;
-					// cout << "send_num :" <<send_num << endl;
+					cout << "send_num :" <<send_num << endl;																			
 
-					if(send_num == 5){
-						// cout << "image receive error" << endl;
-						n.setParam("uav_img_status",0);
-						// cout << "img_end_msg is send " << endl;
-						send_num = 0;
-					}
-
-					char name[64];
+					char name[64];																																																																																																			 
 					static int counter = 0;
 					printf("Image %d@%p  --  %dx%d -- %d\n", frmsize, frmdata, width, height, pixfmt);
 					sprintf(name, "pictures/%dx%d-%d_%d.jpg", width, height, pixfmt, ++counter);
@@ -117,7 +125,27 @@ int main(int argc, char** argv) {
 					cv::resize(bgr_img, resize_img, cv::Size(640, 480), 0, 0, cv::INTER_LINEAR);//缩放倍数：2.8
 					sensor_msgs::ImagePtr img = cv_bridge::CvImage(std_msgs::Header(), "bgr8", resize_img).toImageMsg();
 
-					img_pub.publish(img);
+					if(send_status == 1){
+						cout << "发送人脸图像" << endl;
+						img_pub.publish(img);
+					}
+					else if(send_status == 2){
+						cout << "发送April图像" << endl;
+						april_img_pub.publish(img);
+					}
+					else{
+						cout << "未知指令，发送失败" << endl;
+					}
+
+					//连发
+					if(send_num == image_num){
+						// cout << "image receive error" << endl;
+						n.setParam("uav_img_status",0);
+						// cout << "img_end_msg is send " << endl;
+						send_num = 0;
+					}
+					//	
+					
 					// cout << "image is send" << endl;
 
 					delete[] rgbData;
@@ -131,6 +159,14 @@ int main(int argc, char** argv) {
 		}
 		
 	});
+	// service.start();
+	// for(;;)
+	// //for(int i=0; i<30; i++)
+	// {
+	// 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	// }
+	// service.stop();
+	// std::cout << "done." << std::endl;
 
 	while(ros::ok()){
 
@@ -140,16 +176,19 @@ int main(int argc, char** argv) {
 		if(send_status != 0){
 			cout << "img_send_service start" << endl;
 			service.start();
+			n.setParam("uav_img_service_status",1);
 			for(;;)
 			//for(int i=0; i<30; i++)
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				n.getParam("uav_img_status",send_status);
 				if(send_status == 0){
 					break;
 				}
 			}
 			service.stop();
+			ros::Duration(1.5).sleep();
+			n.setParam("uav_img_service_status",0);
 			cout << "img_send_service stop" << endl;
 		}
 		
