@@ -120,10 +120,6 @@ int main(int argc, char **argv) {
 
 本项目使用 [MIT License](LICENSE)，请查看 LICENSE 文件以获取更多信息。
 
-## 作者
-
-- **tt**
-
 ## 致谢
 
 感谢 Raspberry Pi 和 ROS 社区提供的资源和支持。
