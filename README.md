@@ -107,15 +107,6 @@ int main(int argc, char **argv) {
 }
 ```
 
-## 贡献
-
-欢迎贡献代码！请遵循以下步骤：
-
-1. Fork 本项目。
-2. 创建一个新的分支。
-3. 提交您的更改。
-4. 创建一个 Pull Request。
-
 ## 许可证
 
 本项目使用 [MIT License](LICENSE)，请查看 LICENSE 文件以获取更多信息。
